@@ -12,7 +12,7 @@
 int main()
 {
     DynamicLoadLibray hello;
-    hello.SetupLibrary("plugin1",{"hello","miku","printmess"});
+    hello.SetupLibrary("plugin1",{"hello","miku"});
     hello.Function.at("hello")();
     hello.Function.at("miku")();
 //WIP    hello.Function.at("printmess")();
