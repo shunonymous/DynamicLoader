@@ -4,7 +4,7 @@ project(pocotest)
 set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_MODULE_PATH
-  ${CMAKE_MODULE_PATH}
+  "${CMAKE_MODULE_PATH}"
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules"
   )
@@ -16,7 +16,7 @@ include_directories(${Poco_DIR})
 
 include_directories(include/)
 
-add_executable(test example/example.cpp)
+add_executable(dynld-example example/example.cpp)
 add_library(plugin1 SHARED example/plugin1.cpp)
 
-target_link_libraries(test ${Poco_LIBRARIES})
+target_link_libraries(dynld-example ${Poco_LIBRARIES})
