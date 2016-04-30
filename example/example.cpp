@@ -15,7 +15,7 @@ int main()
     hello.SetupLibrary("plugin1",{"hello","miku","printmess"});
     hello.Function.at("hello")();
     hello.Function.at("miku")();
-    hello.Function.at("printmess")();
+//WIP    hello.Function.at("printmess")();
 
     // Function in Poco::SharedLibrary class
     std::cout << hello.Library.getPath() << std::endl;
