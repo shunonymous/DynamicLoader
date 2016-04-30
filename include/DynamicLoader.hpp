@@ -16,7 +16,6 @@ using DlFunc = void (*)();
 class DynamicLoadLibray
 {
 private:
-    std::string Name;
     std::string Path;
     std::string Symbol;
 public:
@@ -33,16 +32,14 @@ public:
 
 void DynamicLoadLibray::SetupLibrary(std::string SharedLibraryName,std::vector<std::string> SymbolNames)
 {
-    Name = SharedLibraryName;
-
     // Try to load lib<name><suffix> or <name><suffix>
     try{
-	Path = "lib" + Name + Poco::SharedLibrary::suffix();
+	Path = "lib" + SharedLibraryName + Poco::SharedLibrary::suffix();
 	Library.load(Path);
     }
     catch(std::exception &e)
     {
-	Path = Name + Poco::SharedLibrary::suffix();
+	Path = SharedLibraryName + Poco::SharedLibrary::suffix();
 	Library.load(Path);
     }
     catch(...)
