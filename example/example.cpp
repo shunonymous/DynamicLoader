@@ -12,7 +12,7 @@
 int main()
 {
     DynamicLoadLibray hello;
-    hello.setupLibrary("plugin1",{"hello","miku","printmess","sum"});
+    hello.setupLibrary("plugin1",{"hello","miku","sum"});
     hello.callFunction("hello")();
     hello.callFunction("miku")();
 
