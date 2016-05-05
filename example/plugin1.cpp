@@ -16,7 +16,11 @@ extern "C" void miku()
     std::cout << "Miku!" << std::endl;
 }
 
-// WIP
+extern "C" void sum(int num1,int num2,int& ans)
+{
+    ans = num1 + num2;
+}
+
 /*
 extern "C" void printmess(std::string mess1)
 {

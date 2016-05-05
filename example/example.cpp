@@ -12,11 +12,16 @@
 int main()
 {
     DynamicLoadLibray hello;
-    hello.SetupLibrary("plugin1",{"hello","miku"});
-    hello.Function.at("hello")();
-    hello.Function.at("miku")();
-//WIP    hello.Function.at("printmess")();
+    hello.setupLibrary("plugin1",{"hello","miku","printmess","sum"});
+    hello.callFunction("hello")();
+    hello.callFunction("miku")();
 
+    int ans;
+    hello.callFunction("sum")(1,2,&ans);
+    std::cout << "Answer is " << ans << std::endl;
+
+//WIP    hello.callFunction("printmess")("Hello, C++!!!");
+    
     // Function in Poco::SharedLibrary class
     std::cout << hello.Library.getPath() << std::endl;
     std::cout << hello.Library.isLoaded() << std::endl;
