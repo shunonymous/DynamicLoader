@@ -11,17 +11,22 @@
 #include <vector>
 #include <Poco/SharedLibrary.h>
 
-using DlFunc = void (*)();
+using DlFunc = void (*)(...);
 
 class DynamicLoadLibray
 {
 private:
     std::string Path;
     std::string Symbol;
+    std::map<std::string,void*> Function;
 public:
-    void SetupLibrary(std::string SharedLibraryName,std::vector<std::string> SymbolNames);
+    void setupLibrary(std::string SharedLibraryName,std::vector<std::string> SymbolNames);
     Poco::SharedLibrary Library;
-    std::map<std::string,DlFunc> Function;
+
+    inline auto callFunction(std::string FunctionName)
+    {
+	return reinterpret_cast<DlFunc>(Function.at(FunctionName));
+    }
 
     ~DynamicLoadLibray()
     {
@@ -30,7 +35,7 @@ public:
     }
 };
 
-void DynamicLoadLibray::SetupLibrary(std::string SharedLibraryName,std::vector<std::string> SymbolNames)
+void DynamicLoadLibray::setupLibrary(std::string SharedLibraryName,std::vector<std::string> SymbolNames)
 {
     // Try to load lib<name><suffix> or <name><suffix>
     try{
@@ -48,7 +53,7 @@ void DynamicLoadLibray::SetupLibrary(std::string SharedLibraryName,std::vector<s
     }
 
     for(std::string Symbol : SymbolNames)
-	Function.insert(std::make_pair(Symbol,(DlFunc) Library.getSymbol(Symbol)));
+	Function.insert(std::make_pair(Symbol,Library.getSymbol(Symbol)));
 
 } // void DynamicLoadLibray::SetupLibrary(std::string SharedLibraryName,std::vector<std::string> SymbolNames)
 
