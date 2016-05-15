@@ -16,14 +16,21 @@ extern "C" void miku()
     std::cout << "Miku!" << std::endl;
 }
 
-extern "C" void sum(int num1,int num2,int& ans)
+extern "C" int sum(int num1,int num2/*,int& ans*/)
 {
+    int ans;
     ans = num1 + num2;
+    return ans;
 }
 
-/*
+extern "C" void strappend(std::string& str,std::string& rt_str)
+{
+    rt_str = str;
+    rt_str.append("mikumiku.");
+}
+
 extern "C" void printmess(std::string mess1)
 {
     std::cout << mess1 << std::endl;
 }
-*/
+
