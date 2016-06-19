@@ -16,7 +16,7 @@ extern "C" void miku()
     std::cout << "Miku!" << std::endl;
 }
 
-extern "C" int sum(int num1,int num2/*,int& ans*/)
+extern "C" int sum(int num1,int num2)
 {
     int ans;
     ans = num1 + num2;

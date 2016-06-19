@@ -1,4 +1,4 @@
-/* example.cp
+/* example.cpp
  * Author: Shun Terabayashi <shunonymous@gmail.com>
  * License: CC0 1.0 Universal
  */
@@ -11,26 +11,60 @@
 
 int main()
 {
-    DynamicLoadLibray hello;
-    hello.setupLibrary("plugin1",{"hello","miku","sum","strappend","printmess"});
-    hello.callFunction<void>("hello")();
-    hello.callFunction<void>("miku")();
+    using namespace DynamicLoader;
 
+    ///////////////////////////////
+    // Load dynamic load library //
+    ///////////////////////////////
+    
+    DynamicLoadLibray hello;
+    hello.setupLibrary("plugin1",{"hello","miku","sum"});
+
+    /////////////////
+    // Load symbol //
+    /////////////////
+    
+    hello.loadSymbol("strappend");
+    hello.loadSymbol("printmess");
+
+    ///////////////////////////////////////////////
+    // Call function without argument and return //
+    ///////////////////////////////////////////////
+    
+    hello.Function<void>("hello").call();
+    hello.Function<void>("miku").call();
+
+    /////////////////////////////////////////////
+    // Call function with arguments and return //
+    /////////////////////////////////////////////
+    
     int ans;
-    ans = hello.callFunction<int,int,int>("sum")(3,9);
+    // Return type is int
+    ans = hello.Function<int>("sum").call(3,9);
     std::cout << "Answer is " << ans << std::endl;
 
     std::string str = "3939";
     std::cout << str << std::endl;
     std::string rt_str;
-    hello.callFunction<void,std::string&,std::string&>("strappend")(str,rt_str);
+    hello.Function<void>("strappend").call(&str,&rt_str); // Pass reference
     std::cout << rt_str << std::endl;
 
-    hello.callFunction<void,std::string>("printmess")("Hello, C++!!!");
-    hello.callFunction<void,std::string>("printmess")("MukuMiku!");
+    std::string str1 = "Hello,C++!!!";
+    std::string str2 = "MikuMiku!";
+    hello.Function<void>("printmess").call(str1);
+    hello.Function<void>("printmess").call(str2);
 
-    // Function in Poco::SharedLibrary class
+    // TODO
+    //hello.Function<void>("printmess").call("Hello,C++!!!");
+    //hello.Function<void>("printmess").call("MikuMiku!");
+
+
+    ///////////////////////////////////////////
+    // Function in Poco::SharedLibrary class //
+    ///////////////////////////////////////////
+    
     std::cout << "Path:" << hello.Library.getPath() << std::endl;
     std::cout << "Load:" << hello.Library.isLoaded() << std::endl;
-}
+
+} // int main()
     
