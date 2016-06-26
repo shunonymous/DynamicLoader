@@ -39,4 +39,4 @@ GitHub:https://github.com/shunonymous
 
 Mail:shunonymous@gmail.com
 
-[diff]: https://raw.githubusercontent.com/shunonymous/DynamicLoader/doc/diff.png "Before and After"
+[diff]: https://raw.githubusercontent.com/shunonymous/DynamicLoader/master/doc/diff.png "Before and After"
