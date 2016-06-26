@@ -30,24 +30,24 @@ namespace DynamicLoader
     {
     private:
 	std::string Path;
-	std::map<std::string,void*> Functions;
-    public:
+	std::map<std::string, void*> Functions;
 	void loadLibrary(std::string LibraryName);
-	void loadSymbol(std::string SymbolName);
-	void setupLibrary(const std::string LibraryName,std::vector<std::string> SymbolsName);
+    public:
+	DynamicLoadLibray(std::string LibraryName, std::vector<std::string> SymbolsName);
+	DynamicLoadLibray(){}
+	void setupLibrary(std::string LibraryName, std::vector<std::string> SymbolsName);
+	inline void loadSymbol(std::string SymbolName);
+
 	Poco::SharedLibrary Library;
 
 	template <typename T1>
-	auto Function(const std::string FunctionName)
+	auto Function(std::string FunctionName)
 	{
 	    return DynamicLoadFunction<T1>(Functions.at(FunctionName));
 	}
+
     }; // class DynamicLoadLibray
 
-    ///////////////////////////////
-    // Define functions in class //
-    ///////////////////////////////
-    
     template <typename T2>
     class DynamicLoadFunction
     {
@@ -58,6 +58,9 @@ namespace DynamicLoader
 	template <typename ... Types>
 	auto call(Types ... Args);
 
+	template <typename ... Types>
+	constexpr auto alias();
+
 	DynamicLoadFunction(void* Function)
 	{
 	    Func = Function;
@@ -65,7 +68,11 @@ namespace DynamicLoader
 
     }; // class DynamicLoadFunction
 
-    void DynamicLoadLibray::loadLibrary(const std::string LibraryName)
+    ///////////////////////////////
+    // Define functions in class //
+    ///////////////////////////////
+    
+    void DynamicLoadLibray::loadLibrary(std::string LibraryName)
     {
 	// Try to load lib<name><suffix> or <name><suffix>
 	try{
@@ -83,17 +90,22 @@ namespace DynamicLoader
 	}
     } // void DynamicLoadLibray::loadLibrary
     
-    inline void DynamicLoadLibray::loadSymbol(const std::string Symbol)
+    inline void DynamicLoadLibray::loadSymbol(std::string Symbol)
     {
-	Functions.insert(std::make_pair(Symbol,Library.getSymbol(Symbol)));
+	Functions.insert(std::make_pair(Symbol.c_str(), Library.getSymbol(Symbol)));
     }
 
-    void DynamicLoadLibray::setupLibrary(const std::string LibraryName,const std::vector<std::string> SymbolsName)
+    void DynamicLoadLibray::setupLibrary(std::string LibraryName, std::vector<std::string> SymbolsName)
     {
 	loadLibrary(LibraryName);
 	for(auto&& Symbol:SymbolsName)
 	    loadSymbol(Symbol);
-    } // void DynamicLoadLibray::setupLibrary
+    }
+
+    DynamicLoadLibray::DynamicLoadLibray(std::string LibraryName, std::vector<std::string> SymbolsName)
+    {
+	setupLibrary(LibraryName, SymbolsName);
+    } 
 
     template <typename T2>
     template <typename ... Types>
@@ -107,6 +119,15 @@ namespace DynamicLoader
 	return ReturnVal;
     }
 
+    template <typename T2>
+    template <typename ... Types>
+    constexpr auto DynamicLoadFunction<T2>::alias()
+    {
+	using DlFunc = T2 (*)(Types...);
+	return reinterpret_cast<DlFunc>(Func);
+    }
+
+
     /////////////////////////////
     // Template specialization //
     /////////////////////////////
@@ -119,7 +140,10 @@ namespace DynamicLoader
 	void* Func;
     public:
 	template <typename ... Types>
-	void call(Types ... Args);
+	void call(Types&& ... Args);
+
+	template <typename ... Types>
+	constexpr auto alias();
 
 	DynamicLoadFunction(void* Function)
 	{
@@ -128,13 +152,19 @@ namespace DynamicLoader
     };
 
     template <typename ... Types>
-    void DynamicLoadFunction<void>::call(Types ... Args)
+    void DynamicLoadFunction<void>::call(Types&& ... Args)
     {
 	using DlFunc = void (*)(Types...);
-	DlFunc f;
-	f = reinterpret_cast<DlFunc>(Func);
+	DlFunc f = reinterpret_cast<DlFunc>(Func);
 	f(Args...);
     }
-    
+
+    template <typename ... Types>
+    constexpr auto DynamicLoadFunction<void>::alias()
+    {
+	using DlFunc = void (*)(Types...);
+	return reinterpret_cast<DlFunc>(Func);
+    }
+
 } // namespace DynamicLoader
 #endif // MIRMIDIVI_DYNAMIC_LOADER_HPP
