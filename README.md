@@ -1,6 +1,8 @@
 Dynamic Loader
 ==============
 
+![alt text][diff]
+
 What's this?
 ------------
 
@@ -22,28 +24,7 @@ Required
 How to use
 ----------
 
-Show example code.
-
-Classes
--------
-
-#### Description
-
-The DynamicLoadLibrary class dynamically loads shared libraries at run-time.
-
-#### Member Functions
-
-    void SetupLibrary(std::string SharedLibraryName,std::vector<std::string> SymbolNames):
-
-Loads shared library and set parameters.
-
-	Poco::SharedLibrary Library():
-	
-http://pocoproject.org/docs/Poco.SharedLibrary.html
-
-    std::map<std::string,DlFunc> Function:
-	
-Pairs of the symbol's name and the symbol's addres. 
+See example code.
 
 Copylights
 ----------
@@ -57,3 +38,5 @@ Twitter:[@shunonymous](https://twitter.com/shunonymous)
 GitHub:https://github.com/shunonymous
 
 Mail:shunonymous@gmail.com
+
+[diff]: https://raw.githubusercontent.com/shunonymous/DynamicLoader/doc/diff.png "Before and After"
