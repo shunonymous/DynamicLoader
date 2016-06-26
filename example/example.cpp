@@ -40,13 +40,13 @@ int main()
     
     int ans;
     // Return type is int
-    ans = hello.Function<int>("sum").call(3,9);
+    ans = hello.Function<int>("sum").call(3, 9);
     std::cout << "Answer is " << ans << std::endl;
 
     std::string str = "3939";
     std::cout << str << std::endl;
     std::string rt_str;
-    hello.Function<void>("strappend").call(&str,&rt_str); // Pass reference
+    hello.Function<void>("strappend").call(&str, &rt_str); // Pass reference
     std::cout << rt_str << std::endl;
 
     std::string str1 = "Hello,C++!!!";
@@ -55,7 +55,7 @@ int main()
     hello.Function<void>("printmess").call(str2);
 
     // TODO
-    //hello.Function<void>("printmess").call("Hello,C++!!!");
+    //hello.Function<void>("printmess").call("Hello, C++!!!");
     //hello.Function<void>("printmess").call("MikuMiku!");
 
 
@@ -67,4 +67,3 @@ int main()
     std::cout << "Load:" << hello.Library.isLoaded() << std::endl;
 
 } // int main()
-    
