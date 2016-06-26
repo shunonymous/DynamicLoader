@@ -18,5 +18,9 @@ include_directories(include/)
 
 add_executable(dynld-example example/example.cpp)
 add_library(plugin1 SHARED example/plugin1.cpp)
+add_executable(test1 example/test1.cpp)
+add_executable(test2 example/test2.cpp)
 
 target_link_libraries(dynld-example ${Poco_LIBRARIES})
+target_link_libraries(test1 ${Poco_LIBRARIES})
+target_link_libraries(test2 ${Poco_LIBRARIES})
