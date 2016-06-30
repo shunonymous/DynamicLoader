@@ -14,7 +14,7 @@ include(FindPoco)
 find_package(Poco REQUIRED Foundation)
 include_directories(${Poco_DIR})
 
-include_directories(include/)
+include_directories(./)
 
 add_executable(dynld-example example/example.cpp)
 add_library(plugin1 SHARED example/plugin1.cpp)
