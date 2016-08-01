@@ -19,6 +19,11 @@ int main()
     
     DynamicLoadLibray hello;
     hello.setupLibrary("plugin1",{"hello","miku","sum"});
+    std::cout << "plugin1 loaded" << std::endl;
+
+    DynamicLoadLibray hello2;
+    hello2.Directory = "dir";
+    hello2.setupLibrary("plugin2","hello");
 
     /////////////////
     // Load symbol //
@@ -65,5 +70,7 @@ int main()
     
     std::cout << "Path:" << hello.Library.getPath() << std::endl;
     std::cout << "Load:" << hello.Library.isLoaded() << std::endl;
+
+    hello2.Function<void>("hello").call();
 
 } // int main()
