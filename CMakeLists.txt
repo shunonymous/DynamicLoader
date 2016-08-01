@@ -17,7 +17,8 @@ include_directories(${Poco_DIR})
 include_directories(./)
 
 add_executable(dynld-example example/example.cpp)
-add_library(plugin1 SHARED example/plugin1.cpp)
+add_library(plugin1 MODULE example/plugin1.cpp)
+add_subdirectory(dir)
 add_executable(test1 example/test1.cpp)
 add_executable(test2 example/test2.cpp)
 

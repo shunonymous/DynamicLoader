@@ -34,10 +34,12 @@ namespace DynamicLoader
 	void loadLibrary(std::string LibraryName);
     public:
 	DynamicLoadLibray(std::string LibraryName, std::vector<std::string> SymbolsName);
-	DynamicLoadLibray(){}
+	DynamicLoadLibray(std::string LibraryName, std::string SymbolsName);
+	DynamicLoadLibray(){};
 	void setupLibrary(std::string LibraryName, std::vector<std::string> SymbolsName);
+	void setupLibrary(std::string LibraryName, std::string SymbolsName);
 	inline void loadSymbol(std::string SymbolName);
-
+	std::string Directory = "";
 	Poco::SharedLibrary Library;
 
 	template <typename T1>
@@ -59,7 +61,7 @@ namespace DynamicLoader
 	auto call(Types ... Args);
 
 	template <typename ... Types>
-	constexpr auto alias();
+	auto alias();
 
 	DynamicLoadFunction(void* Function)
 	{
@@ -74,14 +76,18 @@ namespace DynamicLoader
     
     void DynamicLoadLibray::loadLibrary(std::string LibraryName)
     {
+	std::cout << "Dir:" << Directory << std::endl;
+	if(Directory != "")
+	    Directory.append("/");
 	// Try to load lib<name><suffix> or <name><suffix>
 	try{
-	    Path = "lib" + LibraryName + Poco::SharedLibrary::suffix();
+	    Path = Directory + "lib" + LibraryName + Poco::SharedLibrary::suffix();
+	    std::cout << Path << std::endl;
 	    Library.load(Path);
 	}
 	catch(std::exception &e)
 	{
-	    Path = LibraryName + Poco::SharedLibrary::suffix();
+	    Path = Directory + LibraryName + Poco::SharedLibrary::suffix();
 	    Library.load(Path);
 	}
 	catch(...)
@@ -102,10 +108,21 @@ namespace DynamicLoader
 	    loadSymbol(Symbol);
     }
 
+    void DynamicLoadLibray::setupLibrary(std::string LibraryName, std::string SymbolsName)
+    {
+	loadLibrary(LibraryName);
+	loadSymbol(SymbolsName);
+    }
+    
     DynamicLoadLibray::DynamicLoadLibray(std::string LibraryName, std::vector<std::string> SymbolsName)
     {
 	setupLibrary(LibraryName, SymbolsName);
-    } 
+    }
+
+    DynamicLoadLibray::DynamicLoadLibray(std::string LibraryName, std::string SymbolsName)
+    {
+	setupLibrary(LibraryName, SymbolsName);
+    }
 
     template <typename T2>
     template <typename ... Types>
@@ -121,7 +138,7 @@ namespace DynamicLoader
 
     template <typename T2>
     template <typename ... Types>
-    constexpr auto DynamicLoadFunction<T2>::alias()
+    auto DynamicLoadFunction<T2>::alias()
     {
 	using DlFunc = T2 (*)(Types...);
 	return reinterpret_cast<DlFunc>(Func);
@@ -143,7 +160,7 @@ namespace DynamicLoader
 	void call(Types&& ... Args);
 
 	template <typename ... Types>
-	constexpr auto alias();
+	auto alias();
 
 	DynamicLoadFunction(void* Function)
 	{
@@ -160,7 +177,7 @@ namespace DynamicLoader
     }
 
     template <typename ... Types>
-    constexpr auto DynamicLoadFunction<void>::alias()
+    auto DynamicLoadFunction<void>::alias()
     {
 	using DlFunc = void (*)(Types...);
 	return reinterpret_cast<DlFunc>(Func);
