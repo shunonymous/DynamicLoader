@@ -26,7 +26,7 @@ How to use
 
 See example code.
 
-Copylights
+Copyrights
 ----------
 
 This software is licensed under [Boost software License v1.0](http://www.boost.org/LICENSE_1_0.txt)
