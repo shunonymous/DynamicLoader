@@ -1,6 +1,12 @@
 Dynamic Loader
 ==============
 
+ABANDONED
+---------
+
+Instead of this, [dlldr](https://github.com/shunonymous/dlldr) is here.
+
+
 ![alt text][diff]
 
 What's this?
